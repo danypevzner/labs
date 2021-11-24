@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Numerics;
+namespace ConsoleApp1
+{
+    class Program
+    {
+
+        static int genpoenkey(int x,int y)
+        {
+            int phi = (x - 1) * (y - 1);
+            int e = 17;
+            Random rnd = new Random();
+            while (!((iscoprime(e, phi) && issimple(e))))
+            {
+                e = rnd.Next(1, 20);
+            }
+            return e;
+        }
+        static int rsaencrypt(int key,int e,int x,int y)
+        {
+
+            
+            BigInteger n = x * y;
+            int phi = (x - 1) * (y - 1);       
+            BigInteger nkey = BigInteger.Pow(key, e);
+            nkey = BigInteger.Remainder(nkey, n);
+            return (int)nkey;
+
+
+        }
+
+        static int rsadecrypt(int key,int e,int x,int y)
+        {
+            
+            int d = 2;
+           
+           
+            BigInteger n = x * y;
+            BigInteger phi = (x - 1) * (y - 1);
+           
+            Random rnd = new Random();
+           
+            while ((d * e % phi) != 1)
+            {
+                d = rnd.Next(1, 5000);
+            }
+            Console.Write("Secret key ");
+            Console.WriteLine(d);
+            BigInteger nkey = BigInteger.Pow(key, d);
+            nkey = BigInteger.Remainder(nkey, n);
+            return (int)nkey;
+
+        }
+        static bool iscoprime(int a, int b)
+        {
+            for (int i = 2; i < a; i++)
+            {
+                if ((a % i == 0) && (b % i == 0))
+                {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+        static bool issimple(int a)
+        {
+            for (int i = 2; i < a; i++)
+            {
+                if (a % i == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+        static void Main(string[] args)
+        {
+            int mes = 25;
+            Console.Write("Message ");
+            Console.WriteLine(mes);
+            int x = 61;
+            //Console.WriteLine(x);
+            int y = 53;
+           // Console.WriteLine(y);
+            int e = genpoenkey(x, y);
+            Console.Write("Open key ");
+            Console.WriteLine(e);
+            
+            mes = rsaencrypt(mes,e,x,y);
+            Console.Write("Encripted ");
+            Console.WriteLine(mes);
+           
+            int xb = rsadecrypt(mes,e,x,y);
+
+            Console.Write("Decripted ");
+
+            // боб получил сообщение
+            Console.Write(xb);
+            //  Console.Write(nkey);
+            // The code provided will print ‘Hello World’ to the console.
+            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
+            //Console.WriteLine("Hello World!");
+            Console.ReadKey();
+
+            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+        }
+    }
+}

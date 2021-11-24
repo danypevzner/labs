@@ -1,0 +1,53 @@
+// Caesar.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+
+#include "pch.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <Windows.h>
+using namespace std;
+string genkey(int k,string word) {
+	string alph = "abcdefghijklmnopqrstuvwxyz";
+	string key =  "eeeeeeeeeeeeeeeeeeeeeeeeee";
+	int pos = 0;
+	key.insert(k, word);
+	for (int i = k + word.length(); i < 26+ k; i++) {
+		while(!(word.find(alph[pos]) == string::npos)) {
+			pos++;
+		 }   
+			key[i%26]= alph[pos];
+			pos++;
+			
+		   
+		
+	}
+	key = key.substr(0,26);
+	return key;
+	}
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	ifstream in("War.txt");
+	string key;
+	string line;
+	string out = "";
+	key=genkey(5, "gav"); //генерируем ключ смещение 5 кодовое слово gav
+
+	
+	if (in.is_open())//шифруем
+	{
+		while (getline(in, line))
+		{
+			for (int i = 0; i < line.length(); i++) {
+				if (isalpha(line[i]))
+				{
+					out = out + key[int(tolower(line[i])) - 97];
+					cout << key[int(tolower(line[i])) - 97];
+				}
+			}
+		}
+	}
+	in.close();     

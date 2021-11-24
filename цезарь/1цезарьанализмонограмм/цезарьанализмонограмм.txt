@@ -1,0 +1,159 @@
+// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include "pch.h"
+#include <iostream>
+#include <string> 
+#include <fstream> 
+#include <algorithm>
+using namespace std; 
+struct gram
+{
+	int n;
+	char ab;
+};
+
+int main() {
+	gram ai[26];
+	for (int i = 0; i < 26; i = i + 1) {
+		ai[i].ab = (char)(i  + 97);
+		
+		
+		ai[i].n = 0;
+
+	}
+	gram ae[26];
+	for (int i = 0; i < 26; i = i + 1) {
+		ae[i].ab = (char)(i + 97);
+
+		ae[i].n = 0;
+	
+	}
+	string s; 
+	ifstream file("file.txt");
+	s.erase(remove(s.begin(), s.end(), ' '), s.end());
+	for (int i = 0; i < s.length(); i++) {
+		if (isalpha((unsigned char)s[i]) == 0) {
+			s.erase(remove(s.begin(), s.end(), s[i]), s.end());
+		}
+	}
+	// считаем количество букв в тексте
+	while (getline(file, s)) { 
+		s.erase(remove(s.begin(), s.end(), ' '), s.end());
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		for (int i = 0; i < s.length(); i++) {
+			if (isalpha((unsigned char)s[i]) == 0) {
+				s.erase(remove(s.begin(), s.end(), s[i]), s.end());
+			}
+		}
+		
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		for (int i = 0; i < (s.length()); i = i + 1) {
+		
+			if (isalpha((unsigned char)s[i])) {
+				ai[int(s[i]) - 97].n++;
+			}
+		}
+
+		s = "";
+
+	}
+
+	ifstream file2("file2.txt");
+	s.erase(remove(s.begin(), s.end(), ' '), s.end());
+	
+	
+	while (getline(file2, s)) { 
+		s.erase(remove(s.begin(), s.end(), ' '), s.end());
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		for (int i = 0; i < s.length(); i++) {
+			if (isalpha((unsigned char)s[i]) == 0) {
+				s.erase(remove(s.begin(), s.end(), s[i]), s.end());
+			}
+		}
+
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		for (int i = 0; i < (s.length()); i = i + 1) {
+		
+			if (isalpha((unsigned char)s[i])) {
+				ae[int(s[i]) - 97].n++;
+			}
+		}
+	
+		s = "";
+
+	}
+	//ai[0].n = 81;
+	//ai[1].n = 15;
+	//ai[2].n = 31;
+	//ai[3].n = 38;
+	//ai[4].n = 121;
+	//ai[5].n = 22;
+	//ai[6].n = 21;
+	//ai[7].n = 49;
+	//ai[8].n = 73;
+	//ai[9].n = 2;
+	//ai[10].n = 8;
+	//ai[11].n = 42;
+	//ai[12].n = 25;
+	//ai[13].n = 71;
+	//ai[14].n = 75;
+	//ai[15].n = 20;
+	//ai[16].n = 1;
+	//ai[17].n = 63;
+	//ai[18].n = 67;
+	//ai[19].n = 89;
+	//ai[20].n = 27;
+	//ai[21].n = 10;
+	//ai[22].n = 18;
+	//ai[23].n = 1;
+	//ai[24].n = 17;
+	//ai[25].n = 0;
+	//можно исполльзовать частоты английских букв
+	//но результат малочитаем
+	gram buff;
+	// сортируем буквы по убыванию частоты
+	for (int j = 0; j < 25; j++) {
+		for (int i = 0; i < 25; i++) {
+			if (ai[i].n < ai[i + 1].n) {
+				buff = ai[i + 1];
+				ai[i + 1] = ai[i];
+				ai[i] = buff;
+
+			}
+			if (ae[i].n < ae[i + 1].n) {
+				buff = ae[i + 1];
+				ae[i + 1] = ae[i];
+				ae[i] = buff;
+
+			}
+
+		};
+	};
+	
+	// заменяем буквы
+	file2.clear();
+	file2.seekg(0, file2.beg);
+	string res;
+	while (getline(file2, s)) { 
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+
+		res = s;
+		int i = 0;
+		while (i < s.length()) {
+			for (int j = 0; j < 26; j++) {
+				if (s[i] == ae[j].ab)  {
+				
+					res[i] = ai[j].ab;
+					cout << res[i];
+				}
+			}
+			i = i + 1;
+		}
+		
+	}
+	
+
+	s = "";
+	return 0;
+}

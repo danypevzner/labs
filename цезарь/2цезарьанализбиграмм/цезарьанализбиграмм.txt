@@ -1,0 +1,116 @@
+#include "pch.h"
+#include <iostream>
+#include <string> 
+#include <fstream> 
+#include <algorithm>
+using namespace std; 
+struct bigram
+{
+	int n;
+	char ab[2];
+};
+
+int main() {
+	bigram ai[676];
+	for (int i = 0; i < 676; i=i+1) {
+		ai[i].ab[0] = (char)((i / 26) % 26 + 97);
+		ai[i].ab[1] = (char)(i % 26 + 97);
+	
+		ai[i].n = 0;
+	
+	}
+	bigram ae[676];
+	for (int i = 0; i < 676; i=i+1) {
+		ae[i].ab[0] = (char)((i / 26) % 26 + 97);
+		ae[i].ab[1] = (char)(i % 26 + 97);
+	
+		ae[i].n = 0;
+	
+	}
+	string s; 
+	ifstream file("file.txt"); 
+	while (getline(file, s)) { 
+		
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		
+		for (int i = 0; i < (s.length()); i = i + 2) {
+		
+
+			if (isalpha((unsigned char)s[i]) && isalpha((unsigned char)s[i + 1])) {
+				ai[(int(s[i]) - 97) * 26 + int(s[i + 1]) - 97].n++;
+			}
+		
+		}
+		s = "";
+		
+		
+	}
+	s = "";
+	ifstream file2("file2.txt");
+
+	while (getline(file2, s)) {
+		
+			transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+			
+			for (int i = 0; i < (s.length()); i = i + 2) {
+			
+				if (isalpha((unsigned char)s[i]) && isalpha((unsigned char)s[i + 1])) {
+					ae[(int(s[i]) - 97) * 26 + int(s[i + 1]) - 97].n++;
+				}
+	
+		}
+		s = "";
+
+
+	}
+	bigram buff;
+	for (int j = 0; j < 675; j++) {
+		for (int i = 0; i < 675; i++) {
+			if (ai[i].n < ai[i + 1].n) {
+				buff = ai[i + 1];
+				ai[i + 1] = ai[i];
+				ai[i] = buff;
+
+			}
+			if (ae[i].n < ae[i + 1].n) {
+				buff = ae[i + 1];
+				ae[i + 1] = ae[i];
+				ae[i] = buff;
+
+			}
+
+		};
+	};
+	
+	file2.clear();
+	file2.seekg(0, file2.beg);
+	string res;
+	while (getline(file2, s)) { 
+		
+		transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+		
+		s.erase(remove(s.begin(), s.end(), ' '), s.end());
+		for (int i = 0; i < s.length(); i++) {
+			if (isalpha((unsigned char)s[i]) == 0) {
+				s.erase(remove(s.begin(), s.end(), s[i]), s.end());
+			}
+		}
+		res = s;
+		int i = 0;
+		while (i < s.length()) {
+			for (int j = 0; j < 6; j++) {
+				if ((s[i] == ae[j].ab[0]) && (s[i + 1] == ae[j].ab[1])) {
+					
+					res[i] = ai[j].ab[0];
+					res[i + 1] = ai[j].ab[1];
+				}
+			}
+			i = i + 2;
+		}
+		
+		cout << res;
+	}
+	
+	s = "";
+	return 0;
+}
