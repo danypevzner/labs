@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Numerics;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Random rnd = new Random();
+            int a = rnd.Next(1, 100);
+            Console.Write("a ");
+            Console.WriteLine(a);
+            int b = rnd.Next(1, 100);
+            Console.Write("b ");
+            Console.WriteLine(b);
+
+            BigInteger g = rnd.Next(1, 100);
+            Console.Write("g ");
+            Console.WriteLine(g);
+            BigInteger p = rnd.Next(1, 100);
+            Console.Write("p ");
+            Console.WriteLine(p);
+            BigInteger A = BigInteger.Remainder( BigInteger.Pow(g, a),p);
+            BigInteger B = BigInteger.Remainder(BigInteger.Pow(g, b), p);
+            BigInteger RA = BigInteger.Remainder(BigInteger.Pow(B, a), p);
+            BigInteger RB = BigInteger.Remainder(BigInteger.Pow(A, b), p);
+            Console.Write("ResA ");
+            Console.Write(RA);
+            Console.Write(" ");
+            Console.Write("ResB ");
+            Console.WriteLine(RB);
+            Console.Write("Alica i Bob dogovorilis o chisle ");
+            Console.WriteLine(RB);
+            // The code provided will print ‘Hello World’ to the console.
+            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
+
+            Console.ReadKey();
+       
+        }
+    }
+}
